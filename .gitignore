@@ -19,7 +19,8 @@ target/
 *.iml
 *.ipr
 
-src/main/resources/logs/logs.log
+src/main/resources/logs
+src/main/resources/test
 
 ### NetBeans ###
 /nbproject/private/

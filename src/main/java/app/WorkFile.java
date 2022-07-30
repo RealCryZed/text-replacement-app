@@ -74,7 +74,7 @@ class WorkFile {
 
             for (int j = startPosition; j < endPosition; j++) {
                 int character = characters.get(j);
-                str = str + (char)character;
+                if (character != 10) str = str + (char)character;
             }
             textList.add(str);
         }
