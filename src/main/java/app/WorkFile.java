@@ -70,7 +70,7 @@ class WorkFile {
             String str = "";
 
             if (startPosition < 5) startPosition = 0;
-            if (endPosition > characters.size()) endPosition = characters.size();
+            if (endPosition > characters.size()) endPosition = characters.size() - 1;
 
             for (int j = startPosition; j < endPosition; j++) {
                 int character = characters.get(j);
@@ -78,11 +78,14 @@ class WorkFile {
             }
             textList.add(str);
         }
-        logger.log(Level.INFO, call + textList + "\n");
+        logger.log(Level.INFO, call);
+        for (int i = 0; i < textList.size(); i++) {
+            logger.log(Level.INFO, i+1 + ") '" + textList.get(i) + "'");
+        }
     }
 
     public void logPositions() {
-        logger.log(Level.INFO, "Positions of the text that was changed: " + positions + " \n");
+        logger.log(Level.INFO, "\nPositions of the text that was changed: " + positions + " \n");
     }
 
     public void replaceWords() {
@@ -112,9 +115,7 @@ class WorkFile {
             writer = new FileWriter(path);
             for (int i = 0; i < newTextList.size(); i++) {
                 writer.write(newTextList.get(i));
-                if ((newTextList.size() - 1 == i && newTextList.get(i).equals(""))) {
-                    writer.write("\n");
-                }
+                writer.write("\n");
             }
             writer.close();
         } catch (IOException e) {
