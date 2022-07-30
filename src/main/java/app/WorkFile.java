@@ -18,6 +18,7 @@ class WorkFile {
     private String afterText;
 
     private ArrayList<Integer> arrayOfPositions = new ArrayList<>();
+    private ArrayList<Integer> arrayOfAllChars = new ArrayList<>();
     private MyLogger logger = MyLogger.getLogger();
 
     public void checkPlacementsOfText(BufferedInputStream fileInput) {
@@ -30,6 +31,7 @@ class WorkFile {
 
             while ((character = fileInput.read()) != -1) {
                 commonTextPosition++;
+                arrayOfAllChars.add(character);
                 if (beforeTextPosition < beforeTextArray.length) {
                     if (character == beforeTextArray[beforeTextPosition]) {
                         beforeTextPosition++;
@@ -39,9 +41,11 @@ class WorkFile {
                     beforeTextPosition = 0;
                 }
             }
+            fileInput.reset();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Thrown IOException");
         }
+
         System.out.println(arrayOfPositions);
     }
 
@@ -76,6 +80,25 @@ class WorkFile {
             newText.add(ln.replaceAll(beforeText, afterText));
         }
         changeTextInFile(newText);
+    }
+
+    public void writeTextAndAdditional5Characters() {
+        int startPosition = 0;
+        int endPosition = 0;
+
+        for (int i = 0; i < arrayOfPositions.size(); i++) {
+            startPosition = arrayOfPositions.get(i) - 1 - 5;
+            endPosition = arrayOfPositions.get(i) + beforeText.length() - 1 + 5;
+
+            if (startPosition < 5) startPosition = 0;
+            if (endPosition > arrayOfAllChars.size()) endPosition = arrayOfAllChars.size();
+
+            for (int j = startPosition; j < endPosition; j++) {
+                int character = arrayOfAllChars.get(j);
+                System.out.print((char)character);
+            }
+            System.out.println("\n");
+        }
     }
 
     private void changeTextInFile(ArrayList<String> newText) {

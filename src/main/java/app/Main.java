@@ -34,6 +34,7 @@ public class Main {
         try {
             fileInput = new BufferedInputStream(new FileInputStream(file.getPath()));
             file.checkPlacementsOfText(fileInput);
+            file.writeTextAndAdditional5Characters();
             file.replaceWords(fileInput);
         } catch (FileNotFoundException e) {
             logger.log(Level.INFO, "Couldn't open the file");
