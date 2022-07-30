@@ -2,7 +2,6 @@ package app;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -19,16 +18,15 @@ public class Main {
         while (!file.doesFileExist()) {
             System.out.println("Write down path to file: ");
             file.setPath(scanner.nextLine());
-            logger.log(Level.INFO, "Path to the file: " + file.getPath() + "\n");
 
             System.out.println("Write down the text you want to find and change: ");
             file.setReplacedText(scanner.nextLine());
-            logger.log(Level.INFO, "Text user wants to find and change: " + file.getReplacedText() + "\n");
 
             System.out.println("Write down the text you want: ");
             file.setNewText(scanner.nextLine());
-            logger.log(Level.INFO, "Text user wants to have instead: " + file.getNewText() + "\n");
         }
+
+        logger.log(Level.INFO, "Filename: " + file.getFileName() + "\n");
 
         BufferedInputStream fileInput = null;
         try {

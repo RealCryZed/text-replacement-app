@@ -31,6 +31,10 @@ class WorkFile {
         return true;
     }
 
+    public String getFileName() {
+        return new File(path).getName();
+    }
+
     public void checkPlacementsOfText(BufferedInputStream fileInput, String text) {
         char[] beforeTextArray = text.toCharArray();
 
@@ -106,9 +110,11 @@ class WorkFile {
         FileWriter writer = null;
         try {
             writer = new FileWriter(path);
-            for (String str : newTextList) {
-                writer.write(str);
-                writer.write("\n");
+            for (int i = 0; i < newTextList.size(); i++) {
+                writer.write(newTextList.get(i));
+                if ((newTextList.size() - 1 == i && newTextList.get(i).equals(""))) {
+                    writer.write("\n");
+                }
             }
             writer.close();
         } catch (IOException e) {

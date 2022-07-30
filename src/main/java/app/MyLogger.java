@@ -10,8 +10,7 @@ class MyLogger {
     private MyLogger() throws IOException {
         Handler fileHandler = new FileHandler("src/main/resources/logs/logs.log");
         logger.addHandler(fileHandler);
-        SimpleFormatter formatter = new SimpleFormatter();
-        fileHandler.setFormatter(formatter);
+        fileHandler.setFormatter(new MyCustomFormatter());
     }
 
     public static MyLogger getLogger(){
@@ -27,5 +26,17 @@ class MyLogger {
 
     public void log(Level level, String msg){
         logger.log(level, msg);
+    }
+
+    private static class MyCustomFormatter extends Formatter {
+
+        @Override
+        public String format(LogRecord record) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(record.getMessage());
+            sb.append("\n");
+            return sb.toString();
+        }
+
     }
 }
