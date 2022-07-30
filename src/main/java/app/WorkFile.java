@@ -25,7 +25,7 @@ class WorkFile {
             return false;
         }
 
-        logger.log(Level.INFO, "File with filename: " + file.getName() + " was found");
+        logger.log(Level.INFO, "File with filename: " + file.getName() + " was found!");
 
         char[] beforeTextArray = beforeText.toCharArray();
         boolean isTextEqual = false;
@@ -41,7 +41,7 @@ class WorkFile {
                         isTextEqual = true;
                         pos++;
                     }
-                }
+                } else pos = 0;
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Thrown IOException");
