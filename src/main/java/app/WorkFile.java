@@ -53,7 +53,6 @@ class WorkFile {
                     beforeTextPosition = 0;
                 }
             }
-            fileInput.reset();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Thrown IOException in checkPlacementOfText() function\n");
         }
