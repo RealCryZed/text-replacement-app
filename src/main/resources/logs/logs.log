@@ -1,10 +1,12 @@
-июл. 30, 2022 2:15:20 PM app.MyLogger log
+июл. 30, 2022 2:45:12 PM app.MyLogger log
 INFO: App started...
-июл. 30, 2022 2:15:31 PM app.MyLogger log
+июл. 30, 2022 2:45:20 PM app.MyLogger log
 INFO: Path to the file: C:\Users\bujhm\Desktop\data.txt
-июл. 30, 2022 2:15:35 PM app.MyLogger log
-INFO: Text user wants to find and change: 111111111 222222222222222 3333333333333
-июл. 30, 2022 2:15:38 PM app.MyLogger log
-INFO: Text user wants to have instead: 125125
-июл. 30, 2022 2:15:38 PM app.MyLogger log
+июл. 30, 2022 2:45:22 PM app.MyLogger log
+INFO: Text user wants to find and change: America
+июл. 30, 2022 2:45:23 PM app.MyLogger log
+INFO: Text user wants to have instead: Russia
+июл. 30, 2022 2:45:23 PM app.MyLogger log
+INFO: File with filename: data.txt was found
+июл. 30, 2022 2:45:23 PM app.MyLogger log
 INFO: Given data checked successfully.

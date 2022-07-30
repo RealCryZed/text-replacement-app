@@ -25,7 +25,7 @@ class WorkFile {
             return false;
         }
 
-        logger.log(Level.INFO, "File with filename: " + file.getName() + "was found");
+        logger.log(Level.INFO, "File with filename: " + file.getName() + " was found");
 
         char[] beforeTextArray = beforeText.toCharArray();
         boolean isTextEqual = false;
@@ -33,12 +33,14 @@ class WorkFile {
         try {
             BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(path));
             int ch = 0;
-            int pos = 1;
+            int pos = 0;
 
             while ((ch = fileInput.read()) != -1) {
-                if (ch == beforeTextArray[pos - 1]) {
-                    isTextEqual = true;
-                    pos++;
+                if (pos < beforeTextArray.length) {
+                    if (ch == beforeTextArray[pos]) {
+                        isTextEqual = true;
+                        pos++;
+                    }
                 }
             }
         } catch (IOException ex) {
