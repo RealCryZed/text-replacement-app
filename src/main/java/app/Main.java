@@ -11,7 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
         MyLogger logger = MyLogger.getLogger();
-        logger.log(Level.INFO, "App started...\n");
 
         Scanner scanner = new Scanner(System.in);
         WorkFile file = new WorkFile();

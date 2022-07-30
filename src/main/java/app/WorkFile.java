@@ -25,10 +25,8 @@ class WorkFile {
         File file = new File(path);
 
         if (!file.exists()) {
-            logger.log(Level.INFO, "File wasn't found\n");
             return false;
         }
-        logger.log(Level.INFO, "File with filename: " + file.getName() + " was found!\n");
 
         return true;
     }
@@ -76,7 +74,7 @@ class WorkFile {
             }
             textList.add(str);
         }
-        logger.log(Level.INFO, call + textList);
+        logger.log(Level.INFO, call + textList + "\n");
     }
 
     public void logPositions() {
@@ -112,7 +110,6 @@ class WorkFile {
                 writer.write(str);
                 writer.write("\n");
             }
-            logger.log(Level.INFO, "File was updated successfully!\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
