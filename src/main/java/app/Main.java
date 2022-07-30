@@ -1,5 +1,8 @@
 package app;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 
@@ -11,21 +14,30 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         WorkFile file = new WorkFile();
+        file.setPath("");
 
-        System.out.println("Write down path to file: ");
-        file.setPath(scanner.nextLine());
-        logger.log(Level.INFO, "Path to the file: " + file.getPath());
+        while (!file.doesFileExist()) {
+            System.out.println("Write down path to file: ");
+            file.setPath(scanner.nextLine());
+            logger.log(Level.INFO, "Path to the file: " + file.getPath());
 
-        System.out.println("Write down the text you want to find and change: ");
-        file.setBeforeText(scanner.nextLine());
-        logger.log(Level.INFO, "Text user wants to find and change: " + file.getBeforeText());
+            System.out.println("Write down the text you want to find and change: ");
+            file.setBeforeText(scanner.nextLine());
+            logger.log(Level.INFO, "Text user wants to find and change: " + file.getBeforeText());
 
-        System.out.println("Write down the text you want: ");
-        file.setAfterText(scanner.nextLine());
-        logger.log(Level.INFO, "Text user wants to have instead: " + file.getAfterText());
+            System.out.println("Write down the text you want: ");
+            file.setAfterText(scanner.nextLine());
+            logger.log(Level.INFO, "Text user wants to have instead: " + file.getAfterText());
+        }
 
-        if (file.checkData()) {
-            logger.log(Level.INFO, "Given data checked successfully.");
-        } else logger.log(Level.WARNING, "Data is wrong.");
+        BufferedInputStream fileInput = null;
+        try {
+            fileInput = new BufferedInputStream(new FileInputStream(file.getPath()));
+            file.checkPlacementsOfText(fileInput);
+            file.replaceWords(fileInput);
+        } catch (FileNotFoundException e) {
+            logger.log(Level.INFO, "Couldn't open the file");
+            e.printStackTrace();
+        }
     }
 }

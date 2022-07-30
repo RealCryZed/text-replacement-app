@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 @Data
@@ -16,39 +17,78 @@ class WorkFile {
     private String beforeText;
     private String afterText;
 
-    public boolean checkData() {
-        MyLogger logger = MyLogger.getLogger();
+    private ArrayList<Integer> arrayOfPositions = new ArrayList<>();
+    private MyLogger logger = MyLogger.getLogger();
+
+    public void checkPlacementsOfText(BufferedInputStream fileInput) {
+        char[] beforeTextArray = beforeText.toCharArray();
+
+        try {
+            int character = 0;
+            int beforeTextPosition = 0;
+            int commonTextPosition = 0;
+
+            while ((character = fileInput.read()) != -1) {
+                commonTextPosition++;
+                if (beforeTextPosition < beforeTextArray.length) {
+                    if (character == beforeTextArray[beforeTextPosition]) {
+                        beforeTextPosition++;
+                    } else beforeTextPosition = 0;
+                } else {
+                    arrayOfPositions.add(commonTextPosition - beforeTextPosition);
+                    beforeTextPosition = 0;
+                }
+            }
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "Thrown IOException");
+        }
+        System.out.println(arrayOfPositions);
+    }
+
+    public boolean doesFileExist() {
         File file = new File(path);
 
         if (!file.exists()) {
             logger.log(Level.INFO, "File wasn't found");
             return false;
         }
-
         logger.log(Level.INFO, "File with filename: " + file.getName() + " was found!");
 
-        char[] beforeTextArray = beforeText.toCharArray();
-        boolean isTextEqual = false;
+        return true;
+    }
+
+    public void replaceWords(BufferedInputStream fileInput) {
+        ArrayList<String> lines = new ArrayList<>();
 
         try {
-            BufferedInputStream fileInput = new BufferedInputStream(new FileInputStream(path));
-            int ch = 0;
-            int pos = 0;
-
-            while ((ch = fileInput.read()) != -1) {
-                if (pos < beforeTextArray.length) {
-                    if (ch == beforeTextArray[pos]) {
-                        isTextEqual = true;
-                        pos++;
-                    }
-                } else pos = 0;
+            FileReader fileReader = new FileReader(path);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
             }
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Thrown IOException");
+            bufferedReader.close();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Error with reading the line from file!");
         }
+        ArrayList<String> newText = new ArrayList<>();
+        for (String ln : lines){
+            newText.add(ln.replaceAll(beforeText, afterText));
+        }
+        changeTextInFile(newText);
+    }
 
-        if (!isTextEqual) return false;
-
-        return true;
+    private void changeTextInFile(ArrayList<String> newText) {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(path);
+            for (String str : newText) {
+                writer.write(str);
+                writer.write("\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
