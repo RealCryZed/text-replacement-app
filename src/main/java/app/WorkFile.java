@@ -1,6 +1,5 @@
 package app;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,19 +9,32 @@ import java.util.logging.Level;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 class WorkFile {
 
     private String path;
-    private String beforeText;
-    private String afterText;
+    private String replacedText;
+    private String newText;
 
-    private ArrayList<Integer> arrayOfPositions = new ArrayList<>();
-    private ArrayList<Integer> arrayOfAllChars = new ArrayList<>();
+    private ArrayList<Integer> positions = new ArrayList<>();
+    private ArrayList<Integer> characters = new ArrayList<>();
+    private ArrayList<String> textList = new ArrayList<>();
+
     private MyLogger logger = MyLogger.getLogger();
 
-    public void checkPlacementsOfText(BufferedInputStream fileInput) {
-        char[] beforeTextArray = beforeText.toCharArray();
+    public boolean doesFileExist() {
+        File file = new File(path);
+
+        if (!file.exists()) {
+            logger.log(Level.INFO, "File wasn't found\n");
+            return false;
+        }
+        logger.log(Level.INFO, "File with filename: " + file.getName() + " was found!\n");
+
+        return true;
+    }
+
+    public void checkPlacementsOfText(BufferedInputStream fileInput, String text) {
+        char[] beforeTextArray = text.toCharArray();
 
         try {
             int character = 0;
@@ -31,37 +43,48 @@ class WorkFile {
 
             while ((character = fileInput.read()) != -1) {
                 commonTextPosition++;
-                arrayOfAllChars.add(character);
+                characters.add(character);
                 if (beforeTextPosition < beforeTextArray.length) {
                     if (character == beforeTextArray[beforeTextPosition]) {
                         beforeTextPosition++;
                     } else beforeTextPosition = 0;
                 } else {
-                    arrayOfPositions.add(commonTextPosition - beforeTextPosition);
+                    positions.add(commonTextPosition - beforeTextPosition);
                     beforeTextPosition = 0;
                 }
             }
             fileInput.reset();
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Thrown IOException");
+            logger.log(Level.SEVERE, "Thrown IOException in checkPlacementOfText() function\n");
         }
-
-        System.out.println(arrayOfPositions);
     }
 
-    public boolean doesFileExist() {
-        File file = new File(path);
+    public void logTextAndAdditional5Characters(String call, String text) {
+        int startPosition = 0;
+        int endPosition = 0;
 
-        if (!file.exists()) {
-            logger.log(Level.INFO, "File wasn't found");
-            return false;
+        for (int i = 0; i < positions.size(); i++) {
+            startPosition = positions.get(i) - 1 - 5;
+            endPosition = positions.get(i) + text.length() - 1 + 5;
+            String str = "";
+
+            if (startPosition < 5) startPosition = 0;
+            if (endPosition > characters.size()) endPosition = characters.size();
+
+            for (int j = startPosition; j < endPosition; j++) {
+                int character = characters.get(j);
+                str = str + (char)character;
+            }
+            textList.add(str);
         }
-        logger.log(Level.INFO, "File with filename: " + file.getName() + " was found!");
-
-        return true;
+        logger.log(Level.INFO, call + textList);
     }
 
-    public void replaceWords(BufferedInputStream fileInput) {
+    public void logPositions() {
+        logger.log(Level.INFO, "Positions of the text that was changed: " + positions + " \n");
+    }
+
+    public void replaceWords() {
         ArrayList<String> lines = new ArrayList<>();
 
         try {
@@ -73,45 +96,33 @@ class WorkFile {
             }
             bufferedReader.close();
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error with reading the line from file!");
+            logger.log(Level.SEVERE, "Error with reading the line from file!\n");
         }
-        ArrayList<String> newText = new ArrayList<>();
+        ArrayList<String> newTextList = new ArrayList<>();
         for (String ln : lines){
-            newText.add(ln.replaceAll(beforeText, afterText));
+            newTextList.add(ln.replaceAll(replacedText, newText));
         }
-        changeTextInFile(newText);
+        changeTextInFile(newTextList);
     }
 
-    public void writeTextAndAdditional5Characters() {
-        int startPosition = 0;
-        int endPosition = 0;
-
-        for (int i = 0; i < arrayOfPositions.size(); i++) {
-            startPosition = arrayOfPositions.get(i) - 1 - 5;
-            endPosition = arrayOfPositions.get(i) + beforeText.length() - 1 + 5;
-
-            if (startPosition < 5) startPosition = 0;
-            if (endPosition > arrayOfAllChars.size()) endPosition = arrayOfAllChars.size();
-
-            for (int j = startPosition; j < endPosition; j++) {
-                int character = arrayOfAllChars.get(j);
-                System.out.print((char)character);
-            }
-            System.out.println("\n");
-        }
-    }
-
-    private void changeTextInFile(ArrayList<String> newText) {
+    private void changeTextInFile(ArrayList<String> newTextList) {
         FileWriter writer = null;
         try {
             writer = new FileWriter(path);
-            for (String str : newText) {
+            for (String str : newTextList) {
                 writer.write(str);
                 writer.write("\n");
             }
+            logger.log(Level.INFO, "File was updated successfully!\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void clearAllLists() {
+        textList.clear();
+        characters.clear();
+        positions.clear();
     }
 }
