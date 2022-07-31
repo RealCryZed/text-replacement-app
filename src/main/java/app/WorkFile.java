@@ -58,6 +58,11 @@ class WorkFile {
         return true;
     }
 
+    /**
+     * Returns true if path has file, false if it doesn't.
+     * This method is needed to check whether the user has entered the path directly to the file.
+     * @return true\false depending on whether path has file or not
+     */
     public boolean pathIsFile() {
         return new File(path).isFile();
     }
