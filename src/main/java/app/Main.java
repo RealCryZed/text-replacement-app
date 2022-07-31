@@ -28,7 +28,7 @@ public class Main {
 
         logger.log(Level.INFO, "Filename: " + file.getFileName() + "\n");
 
-        BufferedInputStream fileInput = null;
+        BufferedInputStream fileInput;
         try {
             fileInput = new BufferedInputStream(new FileInputStream(file.getPath()));
 

@@ -3,6 +3,9 @@ package app;
 import java.io.IOException;
 import java.util.logging.*;
 
+/**
+ * MyLogger is a custom logger. It has Singleton Pattern.
+ */
 class MyLogger {
     private static MyLogger instance;
     private Logger logger = Logger.getLogger("MyLog");
@@ -24,10 +27,18 @@ class MyLogger {
         return instance;
     }
 
+    /**
+     * Custom log method.
+     * @param level logging level
+     * @param msg information about this log
+     */
     public void log(Level level, String msg){
         logger.log(level, msg);
     }
 
+    /**
+     * Custom class for formatting logs. Removes the lines from log file with time and logger information
+     */
     private static class MyCustomFormatter extends Formatter {
 
         @Override

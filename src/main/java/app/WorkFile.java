@@ -7,20 +7,47 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+/**
+ * WorkFile is a class, that we use to do all the work with the file.
+ */
+
 @Data
 @NoArgsConstructor
 class WorkFile {
 
+    /**
+     * Path to the file
+     */
     private String path;
+    /**
+     * Text that user wants to find and then replace
+     */
     private String replacedText;
+    /**
+     * Text that should be in file instead of replacedText
+     */
     private String newText;
 
+    /**
+     * List of positions where we find replacedText
+     */
     private ArrayList<Integer> positions = new ArrayList<>();
+    /**
+     * List with all characters that is in file
+     */
     private ArrayList<Integer> characters = new ArrayList<>();
+    /**
+     * List with found text and 5 characters before and after it
+     */
     private ArrayList<String> textList = new ArrayList<>();
 
     private MyLogger logger = MyLogger.getLogger();
 
+    /**
+     * Returns true if file exists, false if file doesn't exist.
+     * This method is needed to check whether the user has entered the correct path.
+     * @return true\false depending on file existence
+     */
     public boolean doesFileExist() {
         File file = new File(path);
 
@@ -31,10 +58,21 @@ class WorkFile {
         return true;
     }
 
+    /**
+     * Simple method to get filename by path.
+     * @return filename
+     */
     public String getFileName() {
         return new File(path).getName();
     }
 
+    /**
+     * Method takes opened file and text, then reads every byte of the text inside file.
+     * Collects all the characters in the file into the 'characters' array.
+     * Collects all the initial positions, in which the given text is present, in the array "positions".
+     * @param fileInput opened file instance
+     * @param text replacedText or newText depending on when the method is run
+     */
     public void checkPlacementsOfText(BufferedInputStream fileInput, String text) {
         char[] beforeTextArray = text.toCharArray();
 
@@ -60,6 +98,13 @@ class WorkFile {
         }
     }
 
+    /**
+     * Method takes text (replacedText or newText), finds it in the file and then takes 5 characters
+     * from the beginning and from the end and put this String into textList.
+     * Logs what've been put in textList.
+     * @param call string given for logging purposes
+     * @param text replacedText or newText depending on when the method is run
+     */
     public void logTextAndAdditional5Characters(String call, String text) {
         int startPosition = 0;
         int endPosition = 0;
@@ -84,10 +129,18 @@ class WorkFile {
         }
     }
 
+    /**
+     * Logs all positions in log file.
+     */
     public void logPositions() {
         logger.log(Level.INFO, "\nPositions of the text that was changed: " + positions + " \n");
     }
 
+    /**
+     * Takes the old text from the file and writes it to the list. A new list is created, in which
+     * all the lines with the replaced text are placed.
+     * Calls method changeTextInFile()
+     */
     public void replaceWords() {
         ArrayList<String> lines = new ArrayList<>();
 
@@ -109,6 +162,10 @@ class WorkFile {
         changeTextInFile(newTextList);
     }
 
+    /**
+     * Takes list with new text, creates new file. New text is placed in this file line by line.
+     * @param newTextList list of strings with changed text
+     */
     private void changeTextInFile(ArrayList<String> newTextList) {
         FileWriter writer = null;
         try {
@@ -123,6 +180,9 @@ class WorkFile {
         }
     }
 
+    /**
+     * Clear all the lists of class for later use.
+     */
     public void clearAllLists() {
         textList.clear();
         characters.clear();
