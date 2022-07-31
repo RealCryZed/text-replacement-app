@@ -15,16 +15,16 @@ public class Main {
         WorkFile file = new WorkFile();
         file.setPath("");
 
-        while (!file.doesFileExist()) {
-            System.out.println("Write down path to file: ");
+        while (!file.fileExists() || !file.pathIsFile()) {
+            System.out.println("Write down a correct path to file: ");
             file.setPath(scanner.nextLine());
-
-            System.out.println("Write down the text you want to find and change: ");
-            file.setReplacedText(scanner.nextLine());
-
-            System.out.println("Write down the text you want: ");
-            file.setNewText(scanner.nextLine());
         }
+
+        System.out.println("Write down the text you want to find and change: ");
+        file.setReplacedText(scanner.nextLine());
+
+        System.out.println("Write down the text you want: ");
+        file.setNewText(scanner.nextLine());
 
         logger.log(Level.INFO, "Filename: " + file.getFileName() + "\n");
 

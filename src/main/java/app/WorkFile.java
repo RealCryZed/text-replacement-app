@@ -48,7 +48,7 @@ class WorkFile {
      * This method is needed to check whether the user has entered the correct path.
      * @return true\false depending on file existence
      */
-    public boolean doesFileExist() {
+    public boolean fileExists() {
         File file = new File(path);
 
         if (!file.exists()) {
@@ -56,6 +56,10 @@ class WorkFile {
         }
 
         return true;
+    }
+
+    public boolean pathIsFile() {
+        return new File(path).isFile();
     }
 
     /**
