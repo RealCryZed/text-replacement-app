@@ -1,6 +1,9 @@
 package app;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.*;
 
 /**
@@ -11,7 +14,11 @@ class MyLogger {
     private Logger logger = Logger.getLogger("MyLog");
 
     private MyLogger() throws IOException {
-        Handler fileHandler = new FileHandler("src/main/resources/logs/logs.log");
+        Path p = Paths.get("logs", "logs.log");
+        if (!Files.exists(p.getParent())) {
+            Files.createDirectory(p.getParent());
+        }
+        Handler fileHandler = new FileHandler("logs/logs.log");
         logger.addHandler(fileHandler);
         fileHandler.setFormatter(new MyCustomFormatter());
     }

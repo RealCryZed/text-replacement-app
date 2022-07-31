@@ -19,7 +19,7 @@ target/
 *.iml
 *.ipr
 
-src/main/resources/logs
+logs/logs.log
 src/main/resources/test
 
 ### NetBeans ###
