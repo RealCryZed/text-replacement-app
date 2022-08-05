@@ -1,5 +1,5 @@
 # Build application
-FROM maven:3.6.0-jdk-11-slim AS build
+FROM adoptopenjdk/maven-openjdk12 AS build
 COPY src /textreplacement/src
 COPY pom.xml /textreplacement
 RUN mvn -f /textreplacement/pom.xml clean package
