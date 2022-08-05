@@ -20,7 +20,6 @@ target/
 *.ipr
 
 logs/logs.log
-src/main/resources/test
 
 ### NetBeans ###
 /nbproject/private/

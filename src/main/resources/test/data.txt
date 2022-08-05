@@ -1,0 +1,3 @@
+In this first line there is oldText!
+oldText in the second line!
+In 3 line oldText, and this is okay!
